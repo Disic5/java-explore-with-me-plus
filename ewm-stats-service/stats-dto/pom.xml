@@ -6,13 +6,43 @@
         <artifactId>ewm-stats-service</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
+
     <artifactId>stats-dto</artifactId>
     <packaging>jar</packaging>
-    <name>stats-dto Maven Webapp</name>
-    <url>http://maven.apache.org</url>
+    <name>stats-dto</name>
+    <description>DTO module for statistics service</description>
+
+    <properties>
+        <java.version>17</java.version>
+        <lombok.version>1.18.28</lombok.version>
+        <jetbrains-annotations.version>24.0.1</jetbrains-annotations.version>
+    </properties>
+
     <dependencies>
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- JetBrains Annotations -->
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>${jetbrains-annotations.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Jakarta Validation API (добавлено для валидации DTO) -->
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+        </dependency>
     </dependencies>
+
     <build>
-        <finalName>stats-dto</finalName>
+        <finalName>${project.artifactId}</finalName>
     </build>
 </project>
