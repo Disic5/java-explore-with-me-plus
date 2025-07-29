@@ -1,14 +1,15 @@
 package ru.practicum;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
+@ToString
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class HitDto {
@@ -24,6 +25,6 @@ public class HitDto {
 
     private String ip;
 
-    @NotNull  // Consider adding if this field should never be null
-    private LocalDateTime timestamp;  // Changed to lowercase for consistency
+    @NotNull
+    private LocalDateTime timestamp;
 }

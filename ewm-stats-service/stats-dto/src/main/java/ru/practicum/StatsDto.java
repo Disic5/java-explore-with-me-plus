@@ -1,12 +1,13 @@
 package ru.practicum;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.jetbrains.annotations.NotNull;
 
-@Data
+@Getter
+@Setter
+@ToString
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class StatsDto {
@@ -14,8 +15,8 @@ public class StatsDto {
     private String app;
 
     @NotBlank
-    private String uri;  // Consider using 'uri' instead of 'url' for REST consistency
+    private String uri;
 
-    @NotNull  // Should be @NotNull since it's a Long
+    @NotNull
     private Long hits;
 }
