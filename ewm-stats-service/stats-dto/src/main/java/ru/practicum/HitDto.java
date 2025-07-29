@@ -1,8 +1,8 @@
 package ru.practicum;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
 
@@ -21,7 +21,7 @@ public class HitDto {
 
     @NotBlank
     @NotNull
-    private String url;
+    private String uri;
 
     private String ip;
 
