@@ -15,7 +15,7 @@ public class StatsDto {
     private String app;
 
     @NotBlank
-    private String uri;
+    private String url;
 
     @NotNull
     private Long hits;
