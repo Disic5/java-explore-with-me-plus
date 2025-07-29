@@ -2,13 +2,11 @@ package ru.practicum;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-
-@Getter
-@Setter
-@ToString
-@Builder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class StatsDto {

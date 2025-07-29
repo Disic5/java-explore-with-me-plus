@@ -2,14 +2,13 @@ package ru.practicum;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@ToString
-@Builder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class HitDto {
@@ -22,9 +21,6 @@ public class HitDto {
     @NotBlank
     @NotNull
     private String uri;
-
     private String ip;
-
-    @NotNull
-    private LocalDateTime timestamp;
+    private LocalDateTime timeStamp;
 }
