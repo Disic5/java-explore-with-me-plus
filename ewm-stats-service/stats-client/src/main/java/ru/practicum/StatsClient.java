@@ -37,10 +37,10 @@ public abstract class StatsClient {
                 .build();
     }
 
-    public void hit(String app, String url, String ip) {
+    public void hit(String app, String uri, String ip) {
         HitDto dto = new HitDto();
         dto.setApp(app);
-        dto.setUri(url);
+        dto.setUri(uri);
         dto.setIp(ip);
         this.hit(dto);
     }
