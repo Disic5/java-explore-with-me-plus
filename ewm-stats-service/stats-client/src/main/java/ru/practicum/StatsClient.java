@@ -1,104 +1,66 @@
 package ru.practicum;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatusCode;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.web.client.ResourceAccessException;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON;
-
+@Service
 @Slf4j
-public abstract class StatsClient {
+@AllArgsConstructor
+public class StatsClient {
     private final RestClient restClient;
-    private final String serverUrl;
+    private final String url;
 
-    private static final String HIT_ENDPOINT = "/hit";
-    private static final String STATS_ENDPOINT = "/stats";
-
-    public StatsClient(String serverUrl) {
-        this.serverUrl = serverUrl;
-
-        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
-        factory.setConnectTimeout(Duration.ofSeconds(3));
-        factory.setConnectionRequestTimeout(Duration.ofSeconds(5));
-
+    @Autowired
+    public StatsClient(@Value("${stats-server.url}") String serverUrl) {
+        log.info("url: " + serverUrl);
         restClient = RestClient.builder()
-                .requestFactory(factory)
                 .baseUrl(serverUrl)
                 .build();
+        url = serverUrl;
     }
 
-    public void hit(String app, String uri, String ip) {
-        HitDto dto = new HitDto();
-        dto.setApp(app);
-        dto.setUri(uri);
-        dto.setIp(ip);
-        this.hit(dto);
+    public ResponseEntity<Object> saveHit(HitDto hitDto) {
+        return restClient.post()
+                .uri(uriBuilder -> uriBuilder.path("/hit").build())
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(hitDto)
+                .retrieve()
+                .onStatus(HttpStatusCode::isError, (req, res) -> {
+                    throw new RuntimeException("StatsService error: " + res.getStatusText());
+                })
+                .toEntity(Object.class);
     }
 
-    public void hit(HitDto hitDto) throws StatsClientException {
-        try {
-            restClient.post()
-                    .uri(HIT_ENDPOINT)
-                    .contentType(APPLICATION_JSON)
-                    .body(hitDto)
-                    .retrieve();
-        } catch (ResourceAccessException e) {
-            throw new StatsClientException("Connection to stats service failed: " + e.getMessage());
-        } catch (Exception e) {
-            log.error("Unexpected error in hit(): {}", e.getMessage());
-            throw new StatsClientException("Failed to save hit: " + e.getMessage());
-        }
+    public ResponseEntity<Object> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
+        String formattedStart = start.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        String formattedEnd = end.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+
+        return restClient.get()
+                .uri(uriBuilder -> {
+                    log.info("url before /stats: " + url);
+                    uriBuilder.path("/stats")
+                            .queryParam("start", formattedStart)
+                            .queryParam("end", formattedEnd);
+
+                    if (uris != null && !uris.isEmpty()) {
+                        uriBuilder.queryParam("uris", String.join(",", uris));
+                    }
+
+                    return uriBuilder.queryParam("unique", unique).build();
+                })
+                .retrieve()
+                .toEntity(Object.class);
     }
 
-    public Collection<StatsDto> getStats(LocalDateTime start,
-                                         LocalDateTime end,
-                                         Collection<String> uris,
-                                         boolean unique) throws StatsClientException {
-        validateDates(start, end);
-
-        String url = UriComponentsBuilder.fromHttpUrl(serverUrl + STATS_ENDPOINT)
-                .queryParam("start", start.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
-                .queryParam("end", end.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
-                .queryParam("uris", uris)
-                .queryParam("unique", unique)
-                .toUriString();
-
-        log.debug("Requesting stats from: {}", url);
-
-        try {
-            StatsDto[] stats = restClient.get()
-                    .uri(url)
-                    .retrieve()
-                    .onStatus(HttpStatusCode::isError, (req, res) -> {
-                        throw new RuntimeException("Stats service error: " + res.getStatusCode());
-                    })
-                    .body(StatsDto[].class);
-            return stats != null ? Arrays.asList(stats) : Collections.emptyList();
-        } catch (ResourceAccessException e) {
-            log.error("Stats service unavailable. URL: {}, error: {}", url, e.getMessage());
-            throw new StatsClientException("Connection to stats service failed: " + e.getMessage());
-        } catch (Exception e) {
-            log.error("Unexpected error in getStats(): {}", e.getMessage());
-            throw new StatsClientException("Failed to get stats: " + e.getMessage());
-        }
-    }
-
-    private void validateDates(LocalDateTime start, LocalDateTime end) {
-        if (start == null || end == null) {
-            throw new IllegalArgumentException("Dates must not be null");
-        }
-        if (start.isAfter(end)) {
-            throw new IllegalArgumentException("Start date must be before end date");
-        }
-    }
 }
