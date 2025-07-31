@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: stats-server
+
+  datasource:
+    url: jdbc:postgresql://localhost:6541/ewm-stats
+    username: root
+    password: "root"               # пароль в кавычках, особенно если содержит спецсимволы
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      connection-timeout: 30000     # таймаут соединения
+      maximum-pool-size: 10         # максимальный размер пула соединений
+
+liquibase:
+  enabled: true
+  change-log: classpath:db/changelog/db.changelog-master.yaml
+
+server:
+  port: 9090
+
+logging:
+  level:
+    org.springframework.orm.jpa: INFO
+    org.springframework.transaction: INFO
+    org.springframework.transaction.interceptor: TRACE
+    org.springframework.orm.jpa.JpaTransactionManager: DEBUG
+    org.hibernate.sql: DEBUG
+    org.hibernate.type: TRACE
+    org.hibernate.orm.jdbc.bind: TRACE
