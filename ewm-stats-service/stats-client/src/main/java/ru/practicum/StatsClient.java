@@ -42,6 +42,14 @@ public class StatsClient {
                 .toEntity(Object.class);
     }
 
+    public void hit(String app, String url, String ip) {
+        HitDto dto = new HitDto();
+        dto.setApp(app);
+        dto.setUri(url);
+        dto.setIp(ip);
+        dto.setTimeStamp(LocalDateTime.now());
+    }
+
     public ResponseEntity<Object> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
         String formattedStart = start.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
         String formattedEnd = end.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
