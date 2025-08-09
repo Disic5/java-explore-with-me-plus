@@ -1,22 +1,20 @@
-package ru.practicum.svc_private.user.model;
+package ru.practicum.ewm.category.model;
 
 import jakarta.persistence.*;
 import lombok.*;
 
+@Entity
 @Getter
 @Setter
-@Entity
-@Builder
-@Table(name = "users")
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+@Table(name = "categories")
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false)
-    private String name;
-    @Column(nullable = false, unique = true)
-    private String email;
-}
 
+    @Column(name = "name", nullable = false)
+    private String name;
+}
