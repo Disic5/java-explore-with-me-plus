@@ -11,10 +11,22 @@ public class HitMapper {
     }
 
     public static Hit toHit(HitDto hitDto) {
-        return new Hit(hitDto.getId(), hitDto.getApp(), hitDto.getUri(), hitDto.getIp(), LocalDateTime.now());
+        return new Hit(
+                hitDto.getId(),
+                hitDto.getApp(),
+                hitDto.getUri(),
+                hitDto.getIp(),
+                LocalDateTime.now()
+        );
     }
 
     public static HitDto toHitDto(Hit hit) {
-        return new HitDto(hit.getId(), hit.getApp(), hit.getUri(), hit.getIp(), hit.getTimestamp());
+        return new HitDto(
+                hit.getId(),
+                hit.getApp(),
+                hit.getUri(),
+                hit.getIp(),
+                hit.getTimestamp()
+        );
     }
 }

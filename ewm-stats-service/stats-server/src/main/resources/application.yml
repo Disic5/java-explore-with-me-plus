@@ -11,9 +11,9 @@ spring:
       connection-timeout: 30000     # таймаут соединения
       maximum-pool-size: 10         # максимальный размер пула соединений
 
-liquibase:
-  enabled: true
-  change-log: classpath:db/changelog/db.changelog-master.yaml
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yaml
 
 server:
   port: 9090
