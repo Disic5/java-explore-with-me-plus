@@ -12,6 +12,9 @@ import ru.practicum.service.user.UserService;
 import java.util.Collection;
 import java.util.List;
 
+import static ru.practicum.constants.Constants.FROM;
+import static ru.practicum.constants.Constants.SIZE;
+
 @RestController
 @Slf4j
 @RequestMapping("/admin/users")
@@ -32,8 +35,8 @@ public class AdminUserController {
     @ResponseStatus(HttpStatus.OK)
     public Collection<UserDto> findUsers(
             @RequestParam(required = false) List<Long> ids,
-            @RequestParam(required = false, defaultValue = "0") Integer from,
-            @RequestParam(required = false, defaultValue = "10") Integer size
+            @RequestParam(required = false, defaultValue = FROM) Integer from,
+            @RequestParam(required = false, defaultValue = SIZE) Integer size
     ) {
         log.info("Получен HTTP-запрос на получение всех пользователей");
         return userService.getUsers(ids, from, size);

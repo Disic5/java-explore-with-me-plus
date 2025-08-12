@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.HitDto;
 import ru.practicum.StatsClient;
 import ru.practicum.StatsDto;
-import ru.practicum.repository.*;
 import ru.practicum.dto.event.*;
 import ru.practicum.dto.request.ParticipationRequestDto;
 import ru.practicum.exception.ConflictException;
@@ -25,12 +24,15 @@ import ru.practicum.model.enums.ActionState;
 import ru.practicum.model.enums.ActionStateAdmin;
 import ru.practicum.model.enums.RequestStatus;
 import ru.practicum.model.enums.State;
+import ru.practicum.repository.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static ru.practicum.constants.Constants.*;
 
 @Slf4j
 @Service
@@ -139,13 +141,15 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventFullDto> findEventsByAdmin(List<Long> users,
-                                                List<String> states,
-                                                List<Long> categories,
-                                                String rangeStart,
-                                                String rangeEnd,
-                                                int from,
-                                                int size) {
+    public List<EventFullDto> findEventsByAdmin(
+            List<Long> users,
+            List<String> states,
+            List<Long> categories,
+            String rangeStart,
+            String rangeEnd,
+            int from,
+            int size
+    ) {
 
         Pageable pageable = createPageable(from, size, null);
 
@@ -178,19 +182,19 @@ public class EventServiceImpl implements EventService {
                 ));
 
         List<String> uris = events.stream()
-                .map(event -> "/events/" + event.getId())
+                .map(event -> STATS_EVENTS_URL + event.getId())
                 .collect(Collectors.toList());
 
         String statsStart = events.stream()
                 .map(Event::getCreatedOn)
                 .filter(Objects::nonNull)
                 .min(LocalDateTime::compareTo)
-                .map(date -> date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-                .orElse("1970-01-01 00:00:00");
+                .map(date -> date.format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)))
+                .orElse(UNIX_EPOCH_START);
 
         List<StatsDto> stats = statsClient.getStats(
                 statsStart,
-                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)),
                 uris,
                 false
         );
@@ -212,17 +216,18 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventShortDto> findEventsByPublic(String text,
-                                                  List<Long> categories,
-                                                  Boolean paid,
-                                                  String rangeStart,
-                                                  String rangeEnd,
-                                                  Boolean onlyAvailable,
-                                                  String sort,
-                                                  int from,
-                                                  int size,
-                                                  HttpServletRequest request) {
-
+    public List<EventShortDto> findEventsByPublic(
+            String text,
+            List<Long> categories,
+            Boolean paid,
+            String rangeStart,
+            String rangeEnd,
+            Boolean onlyAvailable,
+            String sort,
+            int from,
+            int size,
+            HttpServletRequest request
+    ) {
 
         Pageable pageable = createPageable(from, size, sort);
         LocalDateTime start = parseDateTime(rangeStart, LocalDateTime.now());
@@ -318,9 +323,11 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventRequestStatusUpdateResult updateRequestsStatus(Long userId,
-                                                               Long eventId,
-                                                               EventRequestStatusUpdateRequest request) {
+    public EventRequestStatusUpdateResult updateRequestsStatus(
+            Long userId,
+            Long eventId,
+            EventRequestStatusUpdateRequest request
+    ) {
         User user = validateUserExist(userId);
         Event event = validateEventExist(eventId);
         if (!event.getInitiator().equals(user))
@@ -391,7 +398,7 @@ public class EventServiceImpl implements EventService {
             return defaultIfNull;
         }
         try {
-            return LocalDateTime.parse(dateTimeStr, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            return LocalDateTime.parse(dateTimeStr, DateTimeFormatter.ofPattern(DATE_TIME_FORMAT));
         } catch (DateTimeParseException e) {
             throw new ValidationException("Неверный формат даты. Ожидается: yyyy-MM-dd HH:mm:ss");
         }
@@ -481,8 +488,8 @@ public class EventServiceImpl implements EventService {
             statsStartDate = event.getCreatedOn();
         }
         List<StatsDto> views = statsClient.getStats(
-                statsStartDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
-                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                statsStartDate.format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)),
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)),
                 List.of(request.getRequestURI()),
                 true);
 

@@ -22,26 +22,11 @@ import java.util.List;
 public class StatsController {
     private final StatsClient statsClient;
 
-    //    @PostMapping("/hit")
-//    public ResponseEntity<Object> saveHit(@RequestBody @Valid HitDto hitDto) {
-//        return statsClient.saveHit(hitDto);
-//    }
     @PostMapping("/hit")
     public HitDto saveHit(@RequestBody @Valid HitDto hitDto) {
         return statsClient.saveHit(hitDto);
     }
 
-    //    @GetMapping("/stats")
-//    public ResponseEntity<Object> getStats(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @NotNull LocalDateTime start,
-//                                           @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @NotNull LocalDateTime end,
-//                                           @RequestParam(required = false) List<String> uris,
-//                                           @RequestParam(defaultValue = "false") Boolean unique) {
-//        if (start.isAfter(end)) {
-//            throw new IllegalStateException("Client error: Invalid date range");
-//        }
-//
-//        return statsClient.getStats(start, end, uris, unique);
-//    }
     @GetMapping("/stats")
     public List<StatsDto> getStats(
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @NotNull LocalDateTime start,

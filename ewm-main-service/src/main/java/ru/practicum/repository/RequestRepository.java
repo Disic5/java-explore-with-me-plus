@@ -9,11 +9,19 @@ import java.util.Optional;
 
 public interface RequestRepository extends JpaRepository<Request, Long> {
 
-    List<Request> findAllByRequesterId(Long userId);
+    List<Request> findAllByRequesterId(
+            Long userId
+    );
 
-    List<Request> findAllByEventIdInAndStatus(List<Long> eventIds, RequestStatus status);
+    List<Request> findAllByEventIdInAndStatus(
+            List<Long> eventIds,
+            RequestStatus status
+    );
 
-    List<Request> findAllByEventId_IdAndIdIn(Long eventId, List<Long> requestIds);
+    List<Request> findAllByEventId_IdAndIdIn(
+            Long eventId,
+            List<Long> requestIds
+    );
 
     List<Request> findAllByEventId_IdAndStatusAndIdIn(
             Long eventId,
@@ -21,7 +29,12 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
             List<Long> requestIds
     );
 
-    List<Request> findAllByEventId_Id(Long eventId);
+    List<Request> findAllByEventId_Id(
+            Long eventId
+    );
 
-    Optional<Request> findByRequesterIdAndEventId(Long requesterId, Long eventId);
+    Optional<Request> findByRequesterIdAndEventId(
+            Long requesterId,
+            Long eventId
+    );
 }

@@ -13,6 +13,8 @@ import ru.practicum.dto.location.LocationDto;
 
 import java.time.LocalDateTime;
 
+import static ru.practicum.constants.Constants.DATE_TIME_FORMAT;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -23,7 +25,7 @@ public class UpdateEventRequest {
     private Long category;
     @Length(min = 20, max = 7000)
     private String description;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_TIME_FORMAT)
     private LocalDateTime eventDate;
     @Valid
     private LocationDto location;

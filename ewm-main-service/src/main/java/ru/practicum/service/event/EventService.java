@@ -7,7 +7,6 @@ import ru.practicum.dto.request.ParticipationRequestDto;
 import java.util.Collection;
 import java.util.List;
 
-
 public interface EventService {
 
     EventFullDto save(

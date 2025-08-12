@@ -13,6 +13,9 @@ import ru.practicum.service.compilation.CompilationService;
 
 import java.util.Collection;
 
+import static ru.practicum.constants.Constants.FROM;
+import static ru.practicum.constants.Constants.SIZE;
+
 @RestController
 @RequestMapping(path = "/compilations")
 @RequiredArgsConstructor
@@ -25,8 +28,8 @@ public class PublicCompilationController {
     @ResponseStatus(HttpStatus.OK)
     public Collection<CompilationDto> getCompilations(
             @RequestParam(required = false) Boolean pinned,
-            @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
-            @RequestParam(defaultValue = "10") @Positive Integer size
+            @RequestParam(defaultValue = FROM) @PositiveOrZero Integer from,
+            @RequestParam(defaultValue = SIZE) @Positive Integer size
     ) {
         log.info("Получен HTTP-запрос на получение всех подборок событий");
         return compilationService.getAllCompilations(pinned, from, size);

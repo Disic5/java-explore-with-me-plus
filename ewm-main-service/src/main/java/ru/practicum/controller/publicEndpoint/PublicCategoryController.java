@@ -10,6 +10,9 @@ import ru.practicum.service.category.CategoryService;
 
 import java.util.List;
 
+import static ru.practicum.constants.Constants.FROM;
+import static ru.practicum.constants.Constants.SIZE;
+
 @Slf4j
 @RestController
 @RequestMapping("/categories")
@@ -19,8 +22,8 @@ public class PublicCategoryController {
 
     @GetMapping
     public List<CategoryDto> getCategories(
-            @PositiveOrZero @RequestParam(name = "from", defaultValue = "0") int from,
-            @Positive @RequestParam(name = "size", defaultValue = "10") int size
+            @PositiveOrZero @RequestParam(name = "from", defaultValue = FROM) int from,
+            @Positive @RequestParam(name = "size", defaultValue = SIZE) int size
     ) {
         log.info("Получен HTTP-запрос на получение всех категорий {} размером {}", from, size);
         return categoryService.getAllCategories(from, size);

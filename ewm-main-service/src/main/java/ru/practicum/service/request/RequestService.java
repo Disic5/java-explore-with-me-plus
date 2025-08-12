@@ -6,9 +6,17 @@ import java.util.Collection;
 
 public interface RequestService {
 
-    ParticipationRequestDto addRequest(Long userId, Long eventId);
+    ParticipationRequestDto addRequest(
+            Long userId,
+            Long eventId
+    );
 
-    Collection<ParticipationRequestDto> getRequestsByUserId(Long userId);
+    Collection<ParticipationRequestDto> getRequestsByUserId(
+            Long userId
+    );
 
-    ParticipationRequestDto cancelRequest(Long userId, Long requestId);
+    ParticipationRequestDto cancelRequest(
+            Long userId,
+            Long requestId
+    );
 }

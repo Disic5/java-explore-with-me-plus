@@ -8,12 +8,10 @@ import ru.practicum.model.User;
 
 import java.util.List;
 
+import static ru.practicum.util.SqlQueries.findUsersByIds;
+
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    @Query("""
-            SELECT u
-            FROM User as u
-            WHERE (:ids IS NULL OR u.id in :ids)
-            """)
+    @Query(findUsersByIds)
     List<User> findUsersByIds(List<Long> ids, Pageable pageable);
 }

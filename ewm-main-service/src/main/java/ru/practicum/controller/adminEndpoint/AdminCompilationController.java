@@ -19,23 +19,28 @@ public class AdminCompilationController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CompilationDto create(@RequestBody @Valid NewCompilationDto compilationDto) {
+    public CompilationDto create(
+            @RequestBody @Valid NewCompilationDto compilationDto
+    ) {
         log.info("Получен HTTP-запрос на создание подборки событий");
         return compilationService.createCompilation(compilationDto);
     }
 
-
     @DeleteMapping("/{compId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCompilation(@PathVariable Long compId) {
+    public void deleteCompilation(
+            @PathVariable Long compId
+    ) {
         log.info("Получен HTTP-запрос на удаление подборки событий с id {}", compId);
         compilationService.deleteCompilation(compId);
     }
 
     @PatchMapping("/{compId}")
-    public CompilationDto updateCompilation(@PathVariable Long compId,
-                                            @RequestBody @Valid UpdateCompilationRequest updateCompilationRequest) {
-        log.info("Получен HTTP-запрос на обнавление подборки событий");
+    public CompilationDto updateCompilation(
+            @PathVariable Long compId,
+            @RequestBody @Valid UpdateCompilationRequest updateCompilationRequest
+    ) {
+        log.info("Получен HTTP-запрос на обновление подборки событий");
         return compilationService.updateCompilation(compId, updateCompilationRequest);
     }
 }

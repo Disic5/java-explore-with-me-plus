@@ -6,6 +6,8 @@ import ru.practicum.model.enums.RequestStatus;
 
 import java.time.LocalDateTime;
 
+import static ru.practicum.constants.Constants.DATE_TIME_FORMAT;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -13,7 +15,7 @@ import java.time.LocalDateTime;
 @Builder
 public class ParticipationRequestDto {
     private Long id;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_TIME_FORMAT)
     private LocalDateTime created;
     private Long event;
     private Long requester;

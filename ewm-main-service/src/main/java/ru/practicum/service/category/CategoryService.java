@@ -7,13 +7,25 @@ import java.util.List;
 
 public interface CategoryService {
 
-    CategoryDto save(NewCategoryDto newCategoryDto);
+    CategoryDto save(
+            NewCategoryDto newCategoryDto
+    );
 
-    void deleteCategory(Long catId);
+    void deleteCategory(
+            Long catId
+    );
 
-    CategoryDto updateCategory(Long catId, NewCategoryDto newCategoryDto);
+    CategoryDto updateCategory
+            (Long catId,
+             NewCategoryDto newCategoryDto
+            );
 
-    List<CategoryDto> getAllCategories(int from, int size);
+    List<CategoryDto> getAllCategories(
+            int from,
+            int size
+    );
 
-    CategoryDto getCategoryById(Long catId);
+    CategoryDto getCategoryById(
+            Long catId
+    );
 }

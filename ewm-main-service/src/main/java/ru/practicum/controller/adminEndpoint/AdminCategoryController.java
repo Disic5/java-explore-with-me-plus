@@ -1,6 +1,5 @@
 package ru.practicum.controller.adminEndpoint;
 
-
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,21 +18,27 @@ public class AdminCategoryController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CategoryDto saveCategory(@RequestBody @Valid NewCategoryDto newCategoryDto) {
+    public CategoryDto saveCategory(
+            @RequestBody @Valid NewCategoryDto newCategoryDto
+    ) {
         log.info("Получен HTTP-запрос на добавление категории: {}", newCategoryDto);
         return categoryService.save(newCategoryDto);
     }
 
     @DeleteMapping("/{catId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCategory(@PathVariable Long catId) {
+    public void deleteCategory(
+            @PathVariable Long catId
+    ) {
         log.info("Получен HTTP-запрос на удаление категории с id: {}", catId);
         categoryService.deleteCategory(catId);
     }
 
     @PatchMapping("/{catId}")
-    public CategoryDto updateCategory(@PathVariable Long catId,
-                                      @RequestBody @Valid NewCategoryDto newCategoryDto) {
+    public CategoryDto updateCategory(
+            @PathVariable Long catId,
+            @RequestBody @Valid NewCategoryDto newCategoryDto
+    ) {
         log.info("Получен HTTP-запрос на обновление категории с id: {}, body: {}", catId, newCategoryDto);
         return categoryService.updateCategory(catId, newCategoryDto);
     }

@@ -8,13 +8,26 @@ import java.util.Collection;
 
 public interface CompilationService {
 
-    CompilationDto createCompilation(NewCompilationDto newCompilationDto);
+    CompilationDto createCompilation(
+            NewCompilationDto newCompilationDto
+    );
 
-    Collection<CompilationDto> getAllCompilations(Boolean pinned, Integer from, Integer size);
+    Collection<CompilationDto> getAllCompilations(
+            Boolean pinned,
+            Integer from,
+            Integer size
+    );
 
-    CompilationDto updateCompilation(Long compId, UpdateCompilationRequest updateRequest);
+    CompilationDto updateCompilation(
+            Long compId,
+            UpdateCompilationRequest updateRequest
+    );
 
-    void deleteCompilation(Long id);
+    void deleteCompilation(
+            Long id
+    );
 
-    CompilationDto getCompilationById(Long compId);
+    CompilationDto getCompilationById(
+            Long compId
+    );
 }

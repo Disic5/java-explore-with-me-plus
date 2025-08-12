@@ -12,6 +12,8 @@ import ru.practicum.dto.location.LocationDto;
 
 import java.time.LocalDateTime;
 
+import static ru.practicum.constants.Constants.DATE_TIME_FORMAT;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -31,7 +33,7 @@ public class NewEventDto {
     private String description;
 
     @NotNull(message = "Дата события обязательна")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_TIME_FORMAT)
     private LocalDateTime eventDate;
 
     @NotNull(message = "Локация обязательна")

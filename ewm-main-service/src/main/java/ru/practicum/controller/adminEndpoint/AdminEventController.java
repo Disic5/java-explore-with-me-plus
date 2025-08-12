@@ -11,6 +11,9 @@ import ru.practicum.service.event.EventService;
 import java.util.Collection;
 import java.util.List;
 
+import static ru.practicum.constants.Constants.FROM;
+import static ru.practicum.constants.Constants.SIZE;
+
 @RestController
 @Slf4j
 @RequestMapping("/admin/events")
@@ -35,8 +38,8 @@ public class AdminEventController {
             @RequestParam(name = "states", required = false) List<String> states,
             @RequestParam(name = "rangeStart", required = false) String rangeStart,
             @RequestParam(name = "rangeEnd", required = false) String rangeEnd,
-            @RequestParam(name = "from", required = false, defaultValue = "0") Integer from,
-            @RequestParam(name = "size", required = false, defaultValue = "10") Integer size
+            @RequestParam(name = "from", required = false, defaultValue = FROM) Integer from,
+            @RequestParam(name = "size", required = false, defaultValue = SIZE) Integer size
     ) {
         log.info("Получен HTTP-запрос на получение всех события для admin");
         return eventService.findEventsByAdmin(users, states, categories, rangeStart, rangeEnd, from, size);

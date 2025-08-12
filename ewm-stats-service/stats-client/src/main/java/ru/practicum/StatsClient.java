@@ -62,11 +62,9 @@ public class StatsClient {
                 .body(new ParameterizedTypeReference<>() {
                 });
 
-
         log.info("=== Получены статистические данные ===");
         stats.forEach(stat -> log.info("URI: {}, Hits: {}", stat.getUri(), stat.getHits()));
         log.info("====================================");
         return stats;
     }
-
 }

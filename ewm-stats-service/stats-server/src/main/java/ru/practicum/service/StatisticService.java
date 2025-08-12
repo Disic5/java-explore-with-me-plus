@@ -8,7 +8,14 @@ import java.util.List;
 
 public interface StatisticService {
 
-    HitDto createStatistic(HitDto hitDto);
+    HitDto createStatistic(
+            HitDto hitDto
+    );
 
-    Collection<StatsDto> getAllViewStatsDto(String start, String end, List<String> uri, Boolean unique);
+    Collection<StatsDto> getAllViewStatsDto(
+            String start,
+            String end,
+            List<String> uri,
+            Boolean unique
+    );
 }

@@ -4,8 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import ru.practicum.repository.CategoryRepository;
-import ru.practicum.repository.EventRepository;
 import ru.practicum.dto.category.CategoryDto;
 import ru.practicum.dto.category.NewCategoryDto;
 import ru.practicum.exception.ConflictException;
@@ -13,6 +11,8 @@ import ru.practicum.exception.NotFoundException;
 import ru.practicum.mapper.CategoryMapper;
 import ru.practicum.model.Category;
 import ru.practicum.model.Event;
+import ru.practicum.repository.CategoryRepository;
+import ru.practicum.repository.EventRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -52,17 +52,14 @@ public class CategoryServiceImpl implements CategoryService {
         String newName = newCategoryDto.getName();
         String currentName = category.getName();
 
-        // Если имя не изменилось - просто возвращаем текущую категорию (200 OK)
         if (newName.equals(currentName)) {
             return CategoryMapper.fromToCategoryDto(category);
         }
 
-        // Проверяем, существует ли категория с таким именем (исключая текущую)
         if (categoryRepository.existsByNameIgnoreCaseAndIdNot(newName, catId)) {
             throw new ConflictException("Категория " + newName + " уже существует");
         }
 
-        // Изменяем имя и сохраняем
         category.setName(newName);
         log.info("Категория обновлена - из: {} в: {}", currentName, newName);
         return CategoryMapper.fromToCategoryDto(categoryRepository.save(category));
@@ -88,5 +85,4 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(String.format("Категория с id %d не найдена", id)));
     }
-
 }

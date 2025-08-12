@@ -11,6 +11,8 @@ import ru.practicum.service.event.EventService;
 import java.util.Collection;
 import java.util.List;
 
+import static ru.practicum.constants.Constants.FROM;
+import static ru.practicum.constants.Constants.SIZE;
 
 @Slf4j
 @RestController
@@ -37,8 +39,8 @@ public class PublicEventController {
             @RequestParam(required = false) String rangeEnd,
             @RequestParam(defaultValue = "false") Boolean onlyAvailable,
             @RequestParam(required = false) String sort,
-            @RequestParam(defaultValue = "0") Integer from,
-            @RequestParam(defaultValue = "10") Integer size,
+            @RequestParam(defaultValue = FROM) Integer from,
+            @RequestParam(defaultValue = SIZE) Integer size,
             HttpServletRequest request
     ) {
         log.info("Получен HTTP-запрос на получение всех события для public");

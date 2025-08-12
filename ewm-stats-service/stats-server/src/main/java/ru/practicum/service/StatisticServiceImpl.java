@@ -1,7 +1,6 @@
 package ru.practicum.service;
 
 
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -46,13 +45,8 @@ public class StatisticServiceImpl implements StatisticService {
         }
         log.debug("Getting statistics from {} to {}, unique: {}, for URIs: {}", start, end, unique, uris);
 
-        log.info("=========================================================================================");
         LocalDateTime startTime = parseDate(start);
-        log.info("Время начала: {}", startTime);
-
         LocalDateTime endTime = parseDate(end);
-        log.info("Время конца: {}", endTime);
-        log.info("=========================================================================================");
 
         if (startTime.isAfter(endTime)) {
             throw new ValidationException("Дата начала должна быть раньше даты окончания");
@@ -80,9 +74,8 @@ public class StatisticServiceImpl implements StatisticService {
             try {
                 return LocalDateTime.parse(decodedDate, DateTimeFormatter.ofPattern(pattern));
             } catch (DateTimeParseException ignored) {
-                // Пробуем следующий формат
             }
         }
-        throw new IllegalArgumentException("Could not parse date: " + decodedDate);
+        throw new IllegalArgumentException("Не удалось проанализировать дату: " + decodedDate);
     }
 }
