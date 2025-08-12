@@ -15,10 +15,10 @@ public interface CategoryService {
             Long catId
     );
 
-    CategoryDto updateCategory
-            (Long catId,
-             NewCategoryDto newCategoryDto
-            );
+    CategoryDto updateCategory(
+            Long catId,
+            NewCategoryDto newCategoryDto
+    );
 
     List<CategoryDto> getAllCategories(
             int from,

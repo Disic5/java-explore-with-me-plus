@@ -75,10 +75,10 @@ public class EventController {
 
     @GetMapping("/{userId}/events/{eventId}/requests")
     @ResponseStatus(HttpStatus.OK)
-    public Collection<ParticipationRequestDto> findAllByUserIdAndEventId
-            (@PathVariable(value = "userId") @Min(1) Long userId,
-             @PathVariable(value = "eventId") @Min(1) Long eventId
-            ) {
+    public Collection<ParticipationRequestDto> findAllByUserIdAndEventId(
+            @PathVariable(value = "userId") @Min(1) Long userId,
+            @PathVariable(value = "eventId") @Min(1) Long eventId
+    ) {
         log.info("Получен HTTP-запрос на все запросы по событию  {} созданное пользователем {}", eventId, userId);
         return eventService.findAllRequestsByEventId(userId, eventId);
     }
