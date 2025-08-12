@@ -18,6 +18,7 @@ import ru.practicum.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -40,7 +41,7 @@ public class RequestServiceImpl implements RequestService {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException("Событие с id= " + eventId + " не найдено"));
         LocalDateTime createdOn = LocalDateTime.now();
-        if (event.getInitiator().getId() == userId)
+        if (Objects.equals(event.getInitiator().getId(), userId))
             throw new ConflictException("Инициатор события не может отправить запрос");
         if (event.getState() != State.PUBLISHED)
             throw new ConflictException("Событие не опубликовано");
