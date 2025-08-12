@@ -1,11 +1,14 @@
 package ru.practicum.service;
 
+
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.HitDto;
 import ru.practicum.StatsDto;
 import ru.practicum.constant.StatisticConstant;
+import ru.practicum.exception.ValidationException;
 import ru.practicum.mappers.HitMapper;
 import ru.practicum.model.Hit;
 import ru.practicum.repository.StatisticRepository;
@@ -38,6 +41,9 @@ public class StatisticServiceImpl implements StatisticService {
 
     @Override
     public Collection<StatsDto> getAllViewStatsDto(String start, String end, List<String> uris, Boolean unique) {
+        if (start == null || end == null) {
+            throw new ValidationException("Дата не может быть пустой");
+        }
         log.debug("Getting statistics from {} to {}, unique: {}, for URIs: {}", start, end, unique, uris);
 
         log.info("=========================================================================================");
@@ -48,12 +54,20 @@ public class StatisticServiceImpl implements StatisticService {
         log.info("Время конца: {}", endTime);
         log.info("=========================================================================================");
 
+        if (startTime.isAfter(endTime)) {
+            throw new ValidationException("Дата начала должна быть раньше даты окончания");
+        }
+
         return unique
                 ? statisticRepository.findUniqueStatsByUrisAndTimestampBetween(startTime, endTime, uris)
                 : statisticRepository.findStatsByUrisAndTimestampBetween(startTime, endTime, uris);
     }
 
     private LocalDateTime parseDate(String date) {
+        if (date == null || date.isBlank()) {
+            throw new ValidationException("Дата не может быть пустой");
+        }
+
         String decodedDate = URLDecoder.decode(date, StandardCharsets.UTF_8);
 
         List<String> patterns = Arrays.asList(

@@ -13,8 +13,8 @@ services:
         condition: service_healthy
     healthcheck:
       test: [ "CMD-SHELL", "curl -f http://localhost:9090/actuator/health || exit 1" ]
-      timeout: 30s
-      interval: 60s
+      timeout: 10s
+      interval: 10s
       retries: 5
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/ewm-stats
@@ -53,7 +53,7 @@ services:
       stats-server:
         condition: service_healthy
     environment:
-      - STATS_SERVER_URL=http://ewm-stats-server:9090
+      - STATS_SERVER_URL=http://stats-server:9090
       - SPRING_DATASOURCE_URL=jdbc:postgresql://main-db:5432/main_db
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
