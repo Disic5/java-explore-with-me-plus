@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.category.CategoryDto;
 import ru.practicum.service.category.CategoryService;
@@ -14,6 +15,7 @@ import static ru.practicum.constants.Constants.FROM;
 import static ru.practicum.constants.Constants.SIZE;
 
 @Slf4j
+@Validated
 @RestController
 @RequestMapping("/categories")
 @RequiredArgsConstructor

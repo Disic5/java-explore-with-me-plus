@@ -36,6 +36,7 @@ import static ru.practicum.constants.Constants.*;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
 

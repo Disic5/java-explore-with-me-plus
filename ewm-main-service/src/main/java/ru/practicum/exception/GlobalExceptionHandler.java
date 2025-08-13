@@ -1,6 +1,7 @@
 package ru.practicum.exception;
 
 import jakarta.validation.ConstraintViolationException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -26,12 +28,14 @@ public class GlobalExceptionHandler {
                     .map(error -> error.getField() + ": " + error.getDefaultMessage())
                     .collect(Collectors.toList());
             reason = "Неверные данные запроса";
+            log.error(reason, ex);
         } else {
             ConstraintViolationException cve = (ConstraintViolationException) ex;
             errors = cve.getConstraintViolations().stream()
                     .map(v -> v.getPropertyPath() + ": " + v.getMessage())
                     .collect(Collectors.toList());
             reason = "Недопустимые параметры запроса";
+            log.error(reason, cve);
         }
 
         return ApiError.builder()

@@ -19,51 +19,51 @@ public class Event {
     private Long id;
 
     @Column(name = "annotation")
-    String annotation;
+    private String annotation;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    Category category;
+    private Category category;
 
     @Column(name = "confirmed_requests")
     @Builder.Default
-    Integer confirmedRequests = 0;
+    private Integer confirmedRequests = 0;
 
     @Column(name = "created_on")
-    LocalDateTime createdOn;
+    private LocalDateTime createdOn;
 
     @Column(name = "description")
-    String description;
+    private String description;
 
     @Column(name = "event_date")
-    LocalDateTime eventDate;
+    private LocalDateTime eventDate;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    User initiator;
+    private User initiator;
 
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "location_id")
-    Location location;
+    private Location location;
 
     @Column(name = "paid")
-    Boolean paid;
+    private Boolean paid;
 
     @Column(name = "participant_limit")
-    Integer participantLimit;
+    private Integer participantLimit;
 
     @Column(name = "published_on")
-    LocalDateTime publishedOn;
+    private LocalDateTime publishedOn;
 
     @Column(name = "request_moderation")
-    Boolean requestModeration;
+    private Boolean requestModeration;
 
     @Enumerated(EnumType.STRING)
-    State state;
+    private State state;
 
     @Column(name = "title")
-    String title;
+    private String title;
 
     @Column(name = "views")
-    Long views;
+    private Long views;
 }
