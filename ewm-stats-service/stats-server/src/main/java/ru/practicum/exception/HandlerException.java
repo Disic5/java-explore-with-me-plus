@@ -1,10 +1,10 @@
 package ru.practicum.exception;
 
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +14,16 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice(annotations = RestController.class)
 public class HandlerException {
 
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleMissingParams(MissingServletRequestParameterException e) {
+        log.error("Отсутствует обязательный параметр запроса: {}", e.getMessage());
+        return ErrorResponse.builder()
+                .error("not found")
+                .message(e.getMessage())
+                .build();
+    }
+
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> notFound(final NotFoundException e) {
         log.warn("404 {}", e.getMessage());
@@ -21,6 +31,16 @@ public class HandlerException {
                 .error("not found")
                 .message(e.getMessage())
                 .build(), e.getHttpStatus());
+    }
+
+    @ExceptionHandler(ValidationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse validationHandler(final ValidationException e) {
+        log.warn("404 {}", e.getMessage());
+        return ErrorResponse.builder()
+                .error("not found")
+                .message(e.getMessage())
+                .build();
     }
 
     @ExceptionHandler

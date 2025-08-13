@@ -1,20 +1,23 @@
 package ru.practicum.service;
 
-import jakarta.validation.ValidationException;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.constant.StatisticConstant;
 import ru.practicum.HitDto;
 import ru.practicum.StatsDto;
+import ru.practicum.constant.StatisticConstant;
+import ru.practicum.exception.ValidationException;
 import ru.practicum.mappers.HitMapper;
 import ru.practicum.model.Hit;
 import ru.practicum.repository.StatisticRepository;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -23,11 +26,10 @@ import static ru.practicum.mappers.HitMapper.toHitDto;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class StatisticServiceImpl implements StatisticService {
     private final StatisticRepository statisticRepository;
 
-    @Transactional
+
     @Override
     public HitDto createStatistic(HitDto hitDto) {
         log.debug("Creating hit: {}", hitDto);
@@ -38,11 +40,17 @@ public class StatisticServiceImpl implements StatisticService {
 
     @Override
     public Collection<StatsDto> getAllViewStatsDto(String start, String end, List<String> uris, Boolean unique) {
+        if (start == null || end == null) {
+            throw new ValidationException("Дата не может быть пустой");
+        }
         log.debug("Getting statistics from {} to {}, unique: {}, for URIs: {}", start, end, unique, uris);
 
         LocalDateTime startTime = parseDate(start);
         LocalDateTime endTime = parseDate(end);
-        if (startTime.isAfter(endTime)) throw new ValidationException("Start date should be before end");
+
+        if (startTime.isAfter(endTime)) {
+            throw new ValidationException("Дата начала должна быть раньше даты окончания");
+        }
 
         return unique
                 ? statisticRepository.findUniqueStatsByUrisAndTimestampBetween(startTime, endTime, uris)
@@ -50,11 +58,24 @@ public class StatisticServiceImpl implements StatisticService {
     }
 
     private LocalDateTime parseDate(String date) {
-        try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(StatisticConstant.DATE_TIME_FORMATTER);
-            return LocalDateTime.parse(date, formatter);
-        } catch (DateTimeParseException e) {
-            throw new IllegalArgumentException("Invalid date format. Expected format: " + StatisticConstant.DATE_TIME_FORMATTER, e);
+        if (date == null || date.isBlank()) {
+            throw new ValidationException("Дата не может быть пустой");
         }
+
+        String decodedDate = URLDecoder.decode(date, StandardCharsets.UTF_8);
+
+        List<String> patterns = Arrays.asList(
+                "yyyy-MM-dd HH:mm:ss",
+                "yyyy-MM-dd'T'HH:mm:ss",
+                StatisticConstant.DATE_TIME_FORMATTER
+        );
+
+        for (String pattern : patterns) {
+            try {
+                return LocalDateTime.parse(decodedDate, DateTimeFormatter.ofPattern(pattern));
+            } catch (DateTimeParseException ignored) {
+            }
+        }
+        throw new IllegalArgumentException("Не удалось проанализировать дату: " + decodedDate);
     }
 }
