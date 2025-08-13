@@ -1,4 +1,32 @@
 statsserver:
-      url: http://localhost:9090
+#  statsserver.url: http://localhost:9090   # если запускаем на хосте
+  statsserver.url: http://stats-server:9090 # если запускаем в контейнере
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+
 server:
   port: 8080
+
+spring:
+  application:
+    name: ewm-service
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:6542/main_db
+    username: root
+    password: "root"               # пароль в кавычках, особенно если содержит спецсимволы
+    hikari:
+      connection-timeout: 30000     # таймаут соединения
+      maximum-pool-size: 10         # максимальный размер пула соединений
+
+logging:
+  level:
+    org.springframework.orm.jpa: INFO
+    org.springframework.transaction: INFO
+    org.springframework.transaction.interceptor: TRACE
+    org.springframework.orm.jpa.JpaTransactionManager: DEBUG
+    org.hibernate.sql: DEBUG
+    org.hibernate.type: TRACE
+    org.hibernate.orm.jdbc.bind: TRACE
