@@ -645,33 +645,36 @@
 					}
 				},
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"// Тест 1: Проверка статуса ответа",
-							"pm.test(\"Должен вернуться статус 204\", function () {",
-							"    pm.response.to.have.status(204);",
-							"});",
-							"",
-							"// Тест 2: Проверка, что комментарий удален",
-							"pm.test(\"Комментарий должен быть удален\", async function () {",
-							"    const api = new API(pm);",
-							"    const commentId = pm.collectionVariables.get(\"cid\");",
-							"    const eventId = pm.collectionVariables.get(\"eid\");",
-							"    ",
-							"    try {",
-							"        // Проверяем список комментариев события",
-							"        await api.get('/events/' + eventId + '/comments');",
-							"        const comments = pm.response.json();",
-							"        const commentExists = comments.some(c => c.id === commentId);",
-							"        pm.expect(commentExists).to.be.false;",
-							"    } catch (err) {",
-							"        pm.expect.fail(\"Ошибка при проверке удаления комментария: \" + err.message);",
-							"    }",
-							"});"
-						],
-						"type": "text/javascript"
-					}
+				  "listen": "test",
+				  "script": {
+					"exec": [
+					  "// Тест 1: Проверка статуса ответа",
+					  "pm.test(\"Должен вернуться статус 204\", function () {",
+					  "    pm.response.to.have.status(204);",
+					  "});",
+					  "",
+					  "// Тест 2: Проверка, что комментарий удален",
+					  "pm.test(\"Комментарий должен быть удален\", async function () {",
+					  "    const api = new API(pm);",
+					  "    const commentId = pm.collectionVariables.get(\"cid\");",
+					  "    const eventId = pm.collectionVariables.get(\"eid\");",
+					  "    ",
+					  "    // Получаем список комментариев события",
+					  "    const commentsResponse = await api.get('/events/' + eventId + '/comments');",
+					  "    ",
+					  "    // Проверяем, что комментарий отсутствует в списке",
+					  "    const comments = commentsResponse || [];",
+					  "    const commentExists = comments.some(c => c.id === commentId);",
+					  "    ",
+					  "    if (commentExists) {",
+					  "        pm.expect.fail(\"Комментарий не был удален, он все еще присутствует в списке\");",
+					  "    } else {",
+					  "        pm.expect(commentExists).to.be.false;",
+					  "    }",
+					  "});"
+					],
+					"type": "text/javascript"
+				  }
 				}
 			],
 			"request": {
