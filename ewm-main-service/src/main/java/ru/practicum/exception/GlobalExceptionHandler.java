@@ -22,8 +22,7 @@ public class GlobalExceptionHandler {
         List<String> errors;
         String reason;
 
-        if (ex instanceof MethodArgumentNotValidException) {
-            MethodArgumentNotValidException manve = (MethodArgumentNotValidException) ex;
+        if (ex instanceof MethodArgumentNotValidException manve) {
             errors = manve.getBindingResult().getFieldErrors().stream()
                     .map(error -> error.getField() + ": " + error.getDefaultMessage())
                     .collect(Collectors.toList());
